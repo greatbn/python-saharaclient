@@ -138,7 +138,24 @@ class CreateCluster(command.ShowOne):
             default=False,
             help='Wait for the cluster creation to complete',
         )
-
+        parser.add_argument(
+            '--autoscale',
+            action='store_true',
+            default=False,
+            help='Make the cluster autoscale'
+        )
+        parser.add_argument(
+            '--max_cpu',
+            action='store_true',
+            default=0,
+            help='Set threshold for cpu metric',
+        )
+        parser.add_argument(
+            '--max_ram',
+            action='store_true',
+            default=0,
+            help='Set threshold for ram metric',
+        )
         return parser
 
     def take_action(self, parsed_args):
@@ -191,7 +208,10 @@ class CreateCluster(command.ShowOne):
                 net_id=net_id,
                 count=parsed_args.count,
                 is_public=parsed_args.public,
-                is_protected=parsed_args.protected
+                is_protected=parsed_args.protected,
+                is_autoscale=parsed_args.is_autoscale,
+                max_cpu=parsed_args.max_cpu,
+                max_ram=parsed_args.max_ram
             ).to_dict()
         if parsed_args.count and parsed_args.count > 1:
             clusters = [
@@ -474,6 +494,31 @@ class UpdateCluster(command.ShowOne):
             help='Make the cluster unprotected',
             dest='is_protected'
         )
+        parser.add_argument(
+            '--autoscale',
+            action='store_false',
+            default=False,
+            help='Make the cluster autoscale',
+            dest='is_autoscale'
+        )
+        parser.add_argument(
+            '--noautoscale',
+            action='store_false',
+            help='Make the cluster no autoscale',
+            dest='is_autoscale'
+        )
+        parser.add_argument(
+            '--max_cpu',
+            action='store_true',
+            default=False,
+            help='Set threshold for cpu metric',
+        )
+        parser.add_argument(
+            '--max_ram',
+            action='store_true',
+            default=0,
+            help='Set threshold for ram metric',
+        )
         parser.set_defaults(is_public=None, is_protected=None)
 
         return parser
@@ -500,7 +545,10 @@ class UpdateCluster(command.ShowOne):
             description=parsed_args.description,
             is_public=parsed_args.is_public,
             is_protected=parsed_args.is_protected,
-            shares=shares
+            shares=shares,
+            is_autoscale=parsed_args.is_autoscale,
+            max_cpu=parsed_args.max_cpu,
+            max_ram=parsed_args.max_ram
         )
         data = client.clusters.update(cluster_id, **update_dict).cluster
 

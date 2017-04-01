@@ -32,7 +32,8 @@ class ClusterManager(base.ResourceManager):
                node_groups=None, user_keypair_id=None,
                anti_affinity=None, net_id=None, count=None,
                use_autoconfig=None, shares=None,
-               is_public=None, is_protected=None):
+               is_public=None, is_protected=None,
+               is_autoscale=None, max_cpu=None, max_ram=None):
         """Launch a Cluster."""
 
         data = {
@@ -61,7 +62,10 @@ class ClusterManager(base.ResourceManager):
                               use_autoconfig=use_autoconfig,
                               shares=shares,
                               is_public=is_public,
-                              is_protected=is_protected)
+                              is_protected=is_protected,
+                              is_autoscale=is_autoscale,
+                              max_cpu=max_cpu,
+                              max_ram=max_ram)
 
         if count:
             return self._create('/clusters/multiple', data)
@@ -122,13 +126,15 @@ class ClusterManager(base.ResourceManager):
 
     def update(self, cluster_id, name=NotUpdated, description=NotUpdated,
                is_public=NotUpdated, is_protected=NotUpdated,
-               shares=NotUpdated):
+               shares=NotUpdated, is_autoscale=NotUpdated,
+               max_cpu=NotUpdated, max_ram=NotUpdated):
         """Update a Cluster."""
 
         data = {}
         self._copy_if_updated(data, name=name, description=description,
                               is_public=is_public, is_protected=is_protected,
-                              shares=shares)
+                              shares=shares, is_autoscale=is_autoscale,
+                              max_cpu=max_cpu, max_ram=max_ram)
 
         return self._patch('/clusters/%s' % cluster_id, data)
 
