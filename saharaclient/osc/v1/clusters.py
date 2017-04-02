@@ -494,20 +494,21 @@ class UpdateCluster(command.ShowOne):
             help='Make the cluster unprotected',
             dest='is_protected'
         )
-        parser.add_argument(
+        autoscale = parser.add_mutually_exclusive_group()
+        autoscale.add_argument(
             '--autoscale',
             action='store_false',
             default=False,
             help='Make the cluster autoscale',
             dest='is_autoscale'
         )
-        parser.add_argument(
+        autoscale.add_argument(
             '--noautoscale',
             action='store_false',
             help='Make the cluster no autoscale',
             dest='is_autoscale'
         )
-        parser.add_argument(
+        autoscale.add_argument(
             '--max_cpu',
             action='store_true',
             default=False,
@@ -546,9 +547,7 @@ class UpdateCluster(command.ShowOne):
             is_public=parsed_args.is_public,
             is_protected=parsed_args.is_protected,
             shares=shares,
-            is_autoscale=parsed_args.is_autoscale,
-            max_cpu=parsed_args.max_cpu,
-            max_ram=parsed_args.max_ram
+            is_autoscale=parsed_args.is_autoscale
         )
         data = client.clusters.update(cluster_id, **update_dict).cluster
 
