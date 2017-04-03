@@ -520,6 +520,18 @@ class UpdateCluster(command.ShowOne):
             default=0,
             help='Set threshold for ram metric',
         )
+        autoscale.add_argument(
+            '--min_cpu',
+            action='store_true',
+            default=False,
+            help='Set threshold for cpu metric',
+        )
+        parser.add_argument(
+            '--min_ram',
+            action='store_true',
+            default=0,
+            help='Set threshold for ram metric',
+        )
         parser.set_defaults(is_public=None, is_protected=None)
 
         return parser

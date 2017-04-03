@@ -33,7 +33,8 @@ class ClusterManager(base.ResourceManager):
                anti_affinity=None, net_id=None, count=None,
                use_autoconfig=None, shares=None,
                is_public=None, is_protected=None,
-               is_autoscale=None, max_cpu=None, max_ram=None):
+               is_autoscale=None, max_cpu=None, max_ram=None,
+               min_cpu=None, min_ram=None):
         """Launch a Cluster."""
 
         data = {
@@ -65,7 +66,9 @@ class ClusterManager(base.ResourceManager):
                               is_protected=is_protected,
                               is_autoscale=is_autoscale,
                               max_cpu=max_cpu,
-                              max_ram=max_ram)
+                              max_ram=max_ram,
+                              min_cpu=min_cpu,
+                              min_ram=min_ram)
 
         if count:
             return self._create('/clusters/multiple', data)
